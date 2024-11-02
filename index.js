@@ -2,6 +2,8 @@ const city = document.getElementById("city");
 const errorDisplay = document.querySelector(".error");
 const button = document.querySelector("button");
 
+const showCelsiusTemp = false;
+
 function searchValidation(customError = null) {
   if (city.validity.valueMissing) {
     errorDisplay.textContent = "This field cannot be empty";
@@ -20,7 +22,7 @@ async function getWeatherData(city) {
       { mode: "cors" },
     );
     const weatherData = await fetchData.json();
-    createTodayWeather(weatherData);
+    renderWeather(weatherData);
     console.log(weatherData);
   } catch (err) {
     searchValidation("code 400");
@@ -35,6 +37,44 @@ function convertToAmPmTime(data) {
   } else if (timeInHours < 12) {
     return `${timeInHours}:${timeInMinutes} AM`;
   }
+}
+
+function getWeekday(dateString) {
+  const date = new Date(dateString);
+  let weekday;
+
+  switch (date.getDay()) {
+    case 0:
+      weekday = "Sunday";
+      break;
+    case 1:
+      weekday = "Monday";
+      break;
+    case 2:
+      weekday = "Tuesday";
+      break;
+    case 3:
+      weekday = "Wednesday";
+      break;
+    case 4:
+      weekday = "Thursday";
+      break;
+    case 5:
+      weekday = "Friday";
+      break;
+    case 6:
+      weekday = "Saturday";
+      break;
+  }
+
+  return weekday;
+}
+
+function getFahrenheitOrCelsius(Ftemp) {
+  if (showCelsiusTemp) {
+    const celsiusTemp = (((Ftemp - 32) * 5) / 9).toFixed(2) * 100/100;
+    return `${celsiusTemp}\u00B0C`;
+  } else return `${Ftemp}\u00B0F`;
 }
 
 function createTodayWeather(data) {
@@ -56,11 +96,11 @@ function createTodayWeather(data) {
 
   const temp = document.createElement("p");
   temp.classList.add("temp");
-  temp.textContent = `${data.currentConditions.temp}\u00B0`;
+  temp.textContent = getFahrenheitOrCelsius(data.currentConditions.temp);
 
   const feelsLike = document.createElement("p");
   feelsLike.classList.add("feels-like");
-  feelsLike.textContent = `${data.currentConditions.feelslike} \u00B0`;
+  feelsLike.textContent = getFahrenheitOrCelsius(data.currentConditions.feelslike);
 
   const tempFeelslikeContainer = document.createElement("div");
   tempFeelslikeContainer.append(temp, feelsLike);
@@ -101,6 +141,60 @@ function createTodayWeather(data) {
     sunriseSunsetContainer,
   );
   document.body.append(container);
+}
+
+function createForcastCards(data) {
+  const forcastCard = document.createElement("div");
+  forcastCard.classList.add("forcast-card");
+
+  const weekday = document.createElement("p");
+  weekday.classList.add("weekday");
+  weekday.textContent = getWeekday(data.datetime);
+
+  const temp = document.createElement("p");
+  temp.classList.add("temp");
+  temp.textContent = getFahrenheitOrCelsius(data.temp);
+
+  const conditon = document.createElement("p");
+  conditon.classList.add("condition");
+  conditon.textContent = data.conditions;
+
+  const weatherIcon = document.createElement("img");
+  weatherIcon.classList.add("weather-icon");
+  weatherIcon.src = "thunderstorm.svg";
+
+  forcastCard.append(weekday, temp, conditon, weatherIcon);
+
+  return forcastCard;
+}
+
+function renderWeather(data) {
+  const weatherToday = document.querySelector(".weather-today");
+  const weatherForcast = document.querySelector(".weather-forcast");
+
+  if (weatherToday !== null && weatherForcast !== null) {
+    weatherToday.remove();
+    weatherForcast.remove();
+  }
+
+  createTodayWeather(data);
+
+  const forcastContainer = document.createElement("div");
+  forcastContainer.classList.add("weather-forcast");
+
+  const forcastHeading = document.createElement("h2");
+  forcastHeading.textContent = "7 Day Forcast";
+
+  forcastContainer.append(forcastHeading);
+
+  const forcastCardContainer = document.createElement("div");
+  forcastContainer.append(forcastCardContainer);
+
+  for (let i = 1; i < 8; i++) {
+    forcastCardContainer.append(createForcastCards(data.days[i]));
+  }
+
+  document.body.append(forcastContainer);
 }
 
 city.addEventListener("keydown", (e) => {
