@@ -8,13 +8,44 @@
     <script src="index.js" defer></script>
   </head>
   <body>
-    <div class="searchbar">
-      <label for="city"></label>
-      <input type="search" id="city" name="city" required />
+    <div>
+      <div class="searchbar">
+        <label for="city">Enter a City </label>
+        <div>
+          <input type="search" id="city" name="city" required />
+          <button type="button">Search</button>
+        </div>
+        <span class="error"></span>
+      </div>
     </div>
-    <div class="weather-today"></div>
+    <div class="weather-today">
+      <div>
+        <p class="address">Ladnun, RJ, India</p>
+        <p class="timezone">Asia/Kolkata</p>
+      </div>
+      <hr />
+      <div>
+        <p class="temp">78&deg;</p>
+        <p class="feels-like">feels like : 82&deg;</p>
+      </div>
+      <hr />
+      <div>
+        <p class="description">The sky is clear no possibility of rain</p>
+        <img src="thunderstorm.svg" alt="" class="weather-icon" />
+      </div>
+      <hr />
+      <div>
+        <p class="sunrise"><b>Sunrise</b> - 6:28</p>
+        <p class="sunset"><b>Sunset</b> - 7:30</p>
+      </div>
+    </div>
 
-    <div class="weather-forecast"></div>
+    <div class="weather-forecast">
+      <h2>7 Day Forcast</h2>
+      <div>
+        <div class="forecast-card"></div>
+      </div>
+    </div>
     <!-- things needed to display in weather today 
      resolved adress
      timezone
@@ -22,6 +53,7 @@
      conditions
      sunrise sunset
      temp it is in fahrenheight 
-     feels like-->
+     feels like
+     background Photo by zydeaosika: https://www.pexels.com/photo/aerial-shot-of-a-city-under-a-cinematic-sky-4139312/-->
   </body>
 </html>
