@@ -135,6 +135,7 @@ body {
   min-height: 100vh;
   padding: 1.2rem 0;
   background: no-repeat url(cloudy_sky_dawn.jpg);
+  box-sizing: border-box;
   background-size: cover;
 }
 
@@ -182,6 +183,7 @@ button {
 .temp-buttons {
   display: flex;
   gap: 1rem;
+  padding-top: 1rem;
 }
 
 button.toggled {
