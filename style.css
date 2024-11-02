@@ -130,10 +130,9 @@ table {
 body {
   display: flex;
   flex-direction: column;
-  justify-content: start;
   align-items: center;
   gap: 1.4rem;
-  min-height: 100%;
+  min-height: 100vh;
   padding: 1.2rem 0;
   background: no-repeat url(cloudy_sky_dawn.jpg);
   background-size: cover;
@@ -178,6 +177,15 @@ button {
   font: 600 1.2rem "sans-serif";
   padding: 5px 10px;
   outline: none;
+}
+
+.temp-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+button.toggled {
+  background: darkgoldenrod;
 }
 
 button:active {

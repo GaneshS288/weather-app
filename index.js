@@ -1,8 +1,10 @@
 const city = document.getElementById("city");
 const errorDisplay = document.querySelector(".error");
 const button = document.querySelector("button");
+const celsiusButton = document.getElementById("celsius");
+const fahrenhietButton = document.getElementById("fahrenheit");
 
-const showCelsiusTemp = false;
+let showCelsiusTemp = false;
 
 function searchValidation(customError = null) {
   if (city.validity.valueMissing) {
@@ -72,7 +74,7 @@ function getWeekday(dateString) {
 
 function getFahrenheitOrCelsius(Ftemp) {
   if (showCelsiusTemp) {
-    const celsiusTemp = (((Ftemp - 32) * 5) / 9).toFixed(2) * 100/100;
+    const celsiusTemp = ((((Ftemp - 32) * 5) / 9).toFixed(2) * 100) / 100;
     return `${celsiusTemp}\u00B0C`;
   } else return `${Ftemp}\u00B0F`;
 }
@@ -100,7 +102,9 @@ function createTodayWeather(data) {
 
   const feelsLike = document.createElement("p");
   feelsLike.classList.add("feels-like");
-  feelsLike.textContent = getFahrenheitOrCelsius(data.currentConditions.feelslike);
+  feelsLike.textContent = getFahrenheitOrCelsius(
+    data.currentConditions.feelslike,
+  );
 
   const tempFeelslikeContainer = document.createElement("div");
   tempFeelslikeContainer.append(temp, feelsLike);
@@ -204,3 +208,17 @@ city.addEventListener("keydown", (e) => {
 });
 
 button.addEventListener("click", searchValidation);
+
+celsiusButton.addEventListener("click", () => {
+  showCelsiusTemp = true;
+  celsiusButton.classList.add("toggled");
+  fahrenhietButton.classList.remove("toggled");
+  searchValidation();
+});
+
+fahrenhietButton.addEventListener("click", () => {
+  showCelsiusTemp = false;
+  fahrenhietButton.classList.add("toggled");
+  celsiusButton.classList.remove("toggled");
+  searchValidation();
+});
